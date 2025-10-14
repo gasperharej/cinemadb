@@ -10,6 +10,13 @@ A PostgreSQL-based movie exploration system. The main focus of this project is o
 - SQL-first approach with Python CLI interface
 - Secure and parametrized queries to prevent SQL injection
 
+## Data files
+
+This repository contains scripts and code for working with IMDB data.
+
+The large TSV.gz files are **not included** due to GitHub size limits.  
+You can download them from [IMDB datasets](https://datasets.imdbws.com/).
+
 ## Database Setup
 
 1. Create a PostgreSQL database named `moviesimdb`.
