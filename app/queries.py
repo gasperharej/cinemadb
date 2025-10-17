@@ -1,9 +1,9 @@
 
-def get_movies(conn, title, start_year, end_year, length, genre, rating, sort_by, lim):
+def get_movies(conn, title, start_year, end_year, length, genre, rating, adult, sort_by, lim):
     cur = conn.cursor()
 
     query = """
-        SELECT primarytitle, startyear, runtimeminutes, genres, averagerating
+        SELECT primarytitle, startyear, runtimeminutes, genres, averagerating, isadult
         FROM moviesimdb
         INNER JOIN ratings ON moviesimdb.tconst = ratings.tconst
     """
@@ -36,11 +36,16 @@ def get_movies(conn, title, start_year, end_year, length, genre, rating, sort_by
         conditions.append("averagerating >= %s")
         params.append(rating)
 
+    if adult:
+        pass
+    else:
+        conditions.append("isadult = 0")
+
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
 
     if sort_by:
-        query += f" ORDER BY {sort_by}"
+        query += f" ORDER BY {sort_by} DESC"
 
 
     cur.execute(query, params)
