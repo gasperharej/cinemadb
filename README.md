@@ -66,9 +66,10 @@ Run the `check_title.basics.py` script to verify column types, handle malformed 
 - `title.basics.errors.csv` → rows that failed validation
 
 Example:
-   ```bash
+```bash
    cd data
    python3 check_title.basics.py
+```
 
 ###2️⃣ Step 2 – Convert "\N" values to PostgreSQL NULL format
 
@@ -76,11 +77,11 @@ Next, run the null.py script on the cleaned file.
 This replaces all "\N" strings with proper \N for PostgreSQL import.
 
 Example:
-   ```bash
+```bash
    python3 null.py title.basics.cleaned.csv
+```
 
 This creates a new file:
-   ```bash
    title.basics.cleaned.null.csv
 
 ---
