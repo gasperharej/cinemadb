@@ -7,8 +7,8 @@ The project demonstrates **SQL data modeling**, **joins**, **filtering**, and **
 
 ## 🚀 Features
 
-- Explore movies by genre and year range  
-- Sort results dynamically by rating, release year, title , length, or genre
+- Explore movies by title, genre, length, rating and year range  
+- Sort results dynamically by rating, release year or length
 - Fetch top-rated movies or movies within a specific time frame  
 - Secure, parameterized queries to prevent SQL injection  
 - Lightweight Python CLI interface  
