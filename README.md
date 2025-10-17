@@ -134,6 +134,10 @@ This creates a new file:
 
 ## 🖥️ Example CLI Output
 
+Here is an example output of the Cinemadb app:
+
+![Cinemadb Example](example.png)
+
 ---
 
 ## 🧰 Technologies Used
