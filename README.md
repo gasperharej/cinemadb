@@ -1,74 +1,138 @@
-# Movie Exploration System (PostgreSQL + Python CLI)
+# 🎬 Movie Exploration System (PostgreSQL + Python CLI)
 
-A PostgreSQL-based movie exploration system. The main focus of this project is on SQL data modeling, joins, filtering, and query optimization. A lightweight Python interface allows users to dynamically select genres, filter movies by year ranges, and sort movies based on rating, year, or title.
+A simple yet powerful command-line application for exploring IMDB movie data using **PostgreSQL**.  
+The project demonstrates **SQL data modeling**, **joins**, **filtering**, and **query optimization** on a real-world dataset of over one million movies.
 
-## Features
+---
 
-- Explore movies by genre and year range
-- Sort movies dynamically by rating, release year, or title
-- Fetch top-rated movies or movies within a specific time frame
-- SQL-first approach with Python CLI interface
-- Secure and parametrized queries to prevent SQL injection
+## 🚀 Features
 
-## Data files
+- Explore movies by genre and year range  
+- Sort results dynamically by rating, release year, or title  
+- Fetch top-rated movies or movies within a specific time frame  
+- Secure, parameterized queries to prevent SQL injection  
+- Lightweight Python CLI interface  
 
-This repository contains scripts and code for working with IMDB data.
+---
 
-The large TSV.gz files are **not included** due to GitHub size limits.  
+## 🧩 About the Project
+
+This project was created as a hands-on exercise in:
+- Data modeling and normalization in PostgreSQL  
+- Writing optimized and safe SQL queries  
+- Integrating a Python CLI interface with a relational database  
+
+It uses cleaned IMDB datasets (not included due to file size limits).  
 You can download them from [IMDB datasets](https://datasets.imdbws.com/).
 
-## Database Setup
+---
 
-1. Create a PostgreSQL database named `moviesimdb`.
-2. Import the cleaned movie titles data:
+## 🧱 Project Structure
 
-\copy moviesimdb(tconst, titletype, primarytitle, originaltitle, isadult, startyear, endyear, runtimeminutes, genres) FROM '/home/gasperh/Documents/movies_project/title.basics.cleaned.null.csv' WITH (FORMAT csv, HEADER true, NULL '\N');
-
-3. Import the movie ratings data:
-
-\copy ratings(tconst, averageRating, numVotes) FROM '/home/gasperh/Documents/movies_project/title.ratings.tsv' WITH (FORMAT csv, HEADER true, DELIMITER E'\t', NULL '\N');
-
-4. Verify that the tables `moviesimdb` and `ratings` are populated correctly.
-
-## Python Setup
-
-1. Create a virtual environment:
-
-python3 -m venv venv
-source venv/bin/activate
-
-2. Install required packages:
-
-pip install psycopg2-binary tabulate
-
-3. Run the CLI interface:
-
-python3 -m app.main
-
-## Project Structure
-
+```plaintext
 cinemadb/
 │
 ├── app/
-│   ├── main.py       # CLI interface
-│   ├── db.py         # PostgreSQL connection setup
-│   ├── queries.py    # SQL queries and dynamic filters
+│   ├── main.py            # CLI interface
+│   ├── db.py              # PostgreSQL connection setup
+│   ├── queries.py         # SQL queries and dynamic filters
 │
-├── venv/             # Python virtual environment
-└── README.md
+├── data/
+│   ├── check_title.basics.py   # Validates and cleans title.basics.tsv
+│   ├── null.py                 # Converts values to PostgreSQL NULL format
+│
+├── sql/
+│   ├── create_tables.sql       # Schema definition for movies and ratings
+│   ├── sample_queries.sql      # Example SQL queries
+│
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── .gitignore
 
-## Usage
+---
 
-1. Start the CLI application.
-2. Enter optional filters:
-   - Genre
-   - Start year / End year
-   - Sort by (`rating`, `yearStart`, `titleOriginal`)
-3. View results in a neatly formatted table in the terminal.
+## 🧼 Data Cleaning (Preprocessing)
 
-## Notes
+Before importing IMDB data into PostgreSQL, the raw `.tsv` files must be validated and cleaned.  
+This ensures correct column formatting and replaces invalid or malformed values.
 
-- All SQL queries are parametrized for security.
-- You can extend the filtering logic to include additional fields such as runtime, number of votes, or adult content.
-- Sorting is only applied if the user selects a valid column; otherwise, the default order is used.
+All preprocessing scripts are located in the `data/` folder.
+
+### 1️⃣ Step 1 – Validate and clean `title.basics.tsv`
+
+Run the `check_title.basics.py` script to verify column types, handle malformed rows, and produce two output files:
+- `title.basics.cleaned.csv` → valid and cleaned data  
+- `title.basics.errors.csv` → rows that failed validation
+
+Example:
+   ```bash
+   cd data
+   python3 check_title.basics.py
+
+###2️⃣ Step 2 – Convert "\N" values to PostgreSQL NULL format
+
+Next, run the null.py script on the cleaned file.
+This replaces all "\N" strings with proper \N for PostgreSQL import.
+
+Example:
+   ```bash
+   python3 null.py title.basics.cleaned.csv
+
+This creates a new file:
+   ```bash
+   title.basics.cleaned.null.csv
+
+---
+
+## 🏗️ Database Setup
+
+1. Create a PostgreSQL database:
+   ```bash
+   createdb moviesimdb
+
+2. Create the required tables:
+   ```bash
+   psql -d moviesimdb -f sql/create_tables.sql
+3. Import the movie titles:
+   ```bash
+   \copy moviesimdb(tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
+   FROM '/home/path/to/your/file/title.basics.cleaned.null.csv' 
+   WITH (FORMAT csv, HEADER true, NULL '\N');
+4. Import the movie ratings:
+   ```bash
+   \copy ratings(tconst, averageRating, numVotes) 
+   FROM '/home/path/to/your/file/title.ratings.tsv' 
+   WITH (FORMAT csv, HEADER true, DELIMITER E'\t', NULL '\N');
+5. Verify that the tables were populated correctly:
+   ```bash
+   SELECT COUNT(*) FROM moviesimdb LIMIT 10;
+   SELECT COUNT(*) FROM ratings LIMIT 10;
+
+---
+
+## 🐍 Python Setup
+1. Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+3. Run the CLI:
+   ```bash
+   python3 -m app.main
+
+---
+
+## 🖥️ Example CLI Output
+
+---
+
+## 🧰 Technologies Used
+- PostgreSQL 15+
+- Python 3.10+
+- psycopg2 (PostgreSQL driver)
+- tabulate (CLI table formatting)
+- Linux (Kubuntu)
 
