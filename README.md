@@ -49,7 +49,7 @@ cinemadb/
 ├── README.md
 ├── LICENSE
 └── .gitignore
-
+```
 ---
 
 ## 🧼 Data Cleaning (Preprocessing)
