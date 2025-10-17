@@ -10,15 +10,31 @@ def main():
     title = input("Title: ")
     start_year = input("From Year: ")
     end_year = input("To Year: ")
-    length = input("Length (minutes): ")
+    length = input("Maximum length (minutes): ")
     genre = input("Genre: ")
     rating = input("Lowest rating: ")
     adult = input("Include adult content? (y/n): ").lower() == 'y'
 
-    allowed_sort = ["startyear", "runtimeminutes", "averagerating"]
-    sort_by = input("Sortiraj po (startyear/runtimeminutes/averagerating): ")
-    if sort_by not in allowed_sort:
-        sort_by = None
+    allowed_sort_test = ["year", "length", "rating"]
+    sort_by_test = input("Sort by (year/length/rating): ")
+    if sort_by_test not in allowed_sort_test:
+        sort_by_test = None
+
+    sort_by_mapping = {
+        "year": "startyear",
+        "length": "runtimeminutes",
+        "rating": "averagerating",
+        None: None
+    }
+    sort_by = sort_by_mapping[sort_by_test]
+
+    if sort_by != None:
+        sorting = input("Sorting order (asc/desc): ").upper()
+    else:
+        sorting = None
+
+    if sorting not in ["ASC", "DESC"]:
+        sorting = "DESC"
 
     lim = input("Max results (default 10): ")
     if not lim.isdigit():
@@ -26,7 +42,7 @@ def main():
     else:
         lim = int(lim)
 
-    movies = get_movies(conn, title, start_year, end_year, length, genre, rating, adult, sort_by, lim)
+    movies = get_movies(conn, title, start_year, end_year, length, genre, rating, adult, sort_by, sorting, lim)
     for movie in movies:
         movie = tuple(float(x) if isinstance(x, Decimal) else x for x in movie)
         #print(movie)
@@ -40,4 +56,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-#zobo!! takoj

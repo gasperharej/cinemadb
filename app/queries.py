@@ -1,5 +1,5 @@
 
-def get_movies(conn, title, start_year, end_year, length, genre, rating, adult, sort_by, lim):
+def get_movies(conn, title, start_year, end_year, length, genre, rating, adult, sort_by, sorting, lim):
     cur = conn.cursor()
 
     query = """
@@ -21,6 +21,10 @@ def get_movies(conn, title, start_year, end_year, length, genre, rating, adult, 
     if end_year:
         conditions.append("startyear <= %s")
         params.append(end_year)
+
+    if length:
+        conditions.append("runtimeminutes <= %s")
+        params.append(length)
 
     if genre:
         genres = [g.strip() for g in genre.split(",") if g.strip()]
@@ -44,8 +48,8 @@ def get_movies(conn, title, start_year, end_year, length, genre, rating, adult, 
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
 
-    if sort_by:
-        query += f" ORDER BY {sort_by} DESC"
+    if sort_by != None and sorting:
+        query += f" ORDER BY {sort_by} {sorting}"
 
 
     cur.execute(query, params)
