@@ -70,7 +70,7 @@ Example:
    python3 check_title.basics.py
 ```
 
-###2️⃣ Step 2 – Convert "\N" values to PostgreSQL NULL format
+### 2️⃣ Step 2 – Convert "\N" values to PostgreSQL NULL format
 
 Next, run the null.py script on the cleaned file.
 This replaces all "\N" strings with proper \N for PostgreSQL import.
@@ -81,7 +81,9 @@ Example:
 ```
 
 This creates a new file:
+```bash
    title.basics.cleaned.null.csv
+```
 
 ---
 
