@@ -8,7 +8,7 @@ The project demonstrates **SQL data modeling**, **joins**, **filtering**, and **
 ## 🚀 Features
 
 - Explore movies by genre and year range  
-- Sort results dynamically by rating, release year, or title  
+- Sort results dynamically by rating, release year, title , length, or genre
 - Fetch top-rated movies or movies within a specific time frame  
 - Secure, parameterized queries to prevent SQL injection  
 - Lightweight Python CLI interface  
@@ -43,7 +43,6 @@ cinemadb/
 │
 ├── sql/
 │   ├── create_tables.sql       # Schema definition for movies and ratings
-│   ├── sample_queries.sql      # Example SQL queries
 │
 ├── requirements.txt
 ├── README.md
@@ -91,24 +90,28 @@ This creates a new file:
 1. Create a PostgreSQL database:
    ```bash
    createdb moviesimdb
-
+   ```
 2. Create the required tables:
    ```bash
    psql -d moviesimdb -f sql/create_tables.sql
+   ```
 3. Import the movie titles:
    ```bash
    \copy moviesimdb(tconst, titleType, primaryTitle, originalTitle, isAdult, startYear, endYear, runtimeMinutes, genres) 
    FROM '/home/path/to/your/file/title.basics.cleaned.null.csv' 
    WITH (FORMAT csv, HEADER true, NULL '\N');
+   ```
 4. Import the movie ratings:
    ```bash
    \copy ratings(tconst, averageRating, numVotes) 
    FROM '/home/path/to/your/file/title.ratings.tsv' 
    WITH (FORMAT csv, HEADER true, DELIMITER E'\t', NULL '\N');
+   ```
 5. Verify that the tables were populated correctly:
    ```bash
    SELECT COUNT(*) FROM moviesimdb LIMIT 10;
    SELECT COUNT(*) FROM ratings LIMIT 10;
+   ```
 
 ---
 
@@ -117,12 +120,15 @@ This creates a new file:
    ```bash
    python3 -m venv venv
    source venv/bin/activate
+   ```
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
+   ```
 3. Run the CLI:
    ```bash
    python3 -m app.main
+   ```
 
 ---
 
